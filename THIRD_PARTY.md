@@ -64,6 +64,12 @@ https://github.com/notofonts/noto-cjk
 
 https://github.com/notofonts/noto-cjk/blob/main/Sans/LICENSE
 
+## 森云 SG8A 相机驱动包
+
+`camera_support/sensing_sg8a/` 包含 `SG8A_ORIN_GMSL2-F_V2_AGX_Orin_YUV_JP6.2_L4TR36.4.3` 中的内核、五个模块、设备树、原厂说明及随包源码片段，适配当前 AGX Orin / L4T R36.4.3 环境。文件来源和 SHA256 见该目录的 `output_json/package_manifest.json`。
+
+保留源码原有版权与许可标记，并附 GPL-2.0 文本；这不代表所有厂商二进制采用统一许可。随包源码不是完整内核或全部模块的可重编译源码树，完整对应源码及厂商组件的使用、再分发条件需向原提供方确认。安装和运行方法、脚本改动与验证边界见该目录的 README。
+
 ## 本项目代码
 
 本次整理未代替作者选择原创代码的开源许可证。第三方许可证仅适用于各自组件。

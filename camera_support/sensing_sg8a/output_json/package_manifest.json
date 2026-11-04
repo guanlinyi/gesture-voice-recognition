@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "source_package": "SG8A_ORIN_GMSL2-F_V2_AGX_Orin_YUV_JP6.2_L4TR36.4.3",
+  "prepared_on": "2026-11-04",
+  "platform": {
+    "board": "Jetson AGX Orin",
+    "jetpack": "6.2",
+    "l4t": "R36.4.3",
+    "kernel": "5.15.148-tegra",
+    "architecture": "aarch64"
+  },
+  "defaults": {
+    "enable_3G": [
+      0,
+      0,
+      1,
+      0
+    ],
+    "camera_model_index": 5,
+    "device": "/dev/video4"
+  },
+  "files": [
+    {
+      "source": "boot/Image",
+      "path": "input_bin/Image.bin",
+      "bytes": 42304000,
+      "sha256": "b55d99958037872c63b5034e84f6e4509be899f2cfe75d63564c815daf9832f8"
+    },
+    {
+      "source": "ko/max9295.ko",
+      "path": "input_ko/max9295.ko",
+      "bytes": 84448,
+      "sha256": "88701fb5d716bf7c540b5794b7e78b5acdd6cd6749a80f15b81f2b7fe1e0813d"
+    },
+    {
+      "source": "ko/max9296.ko",
+      "path": "input_ko/max9296.ko",
+      "bytes": 100104,
+      "sha256": "3ffbfa082aa3853a6ecdf2d7ddc07478c2808c3d599dd835101fff93563693b4"
+    },
+    {
+      "source": "ko/sgx-yuv-gmsl2.ko",
+      "path": "input_ko/sgx-yuv-gmsl2.ko",
+      "bytes": 88616,
+      "sha256": "d90edf7d1f19280a6025443c2f30eb64e8593c365b628d3297b1dde41f966d73"
+    },
+    {
+      "source": "ko/nvhost-nvcsi-t194.ko",
+      "path": "input_ko/nvhost-nvcsi-t194.ko",
+      "bytes": 47096,
+      "sha256": "d5cbd18d48b7431bf08245fdbd16483a24dc4597919f6cf05ee77d97f71b83e7"
+    },
+    {
+      "source": "ko/tegra-camera.ko",
+      "path": "input_ko/tegra-camera.ko",
+      "bytes": 1494368,
+      "sha256": "91314d9dc8ba06122917c3ba2896fbdd999b5a24e7837734f2b337840f66d59d"
+    },
+    {
+      "source": "dtb/SGX_YUV_GMSL2/tegra234-camera-yuv-gmsl2x8-overlay.dtbo",
+      "path": "input_dtbo/tegra234-camera-yuv-gmsl2x8-overlay.dtbo",
+      "bytes": 65043,
+      "sha256": "290e6e2751234eabe757c90831eeb2cf2d2a0d12c900389c52767ebebae2417f"
+    },
+    {
+      "source": "source/hardware/nvidia/t23x/nv-public/overlay/SG8A_ORIN_GMSLX8/Makefile",
+      "path": "source/hardware/nvidia/t23x/nv-public/overlay/SG8A_ORIN_GMSLX8/Makefile",
+      "bytes": 736,
+      "sha256": "4b83d55c3b69cda7d59d63e9cdb328ec1c92d7fbb5c7fa0e33ef065d1dc22459"
+    },
+    {
+      "source": "source/hardware/nvidia/t23x/nv-public/overlay/SG8A_ORIN_GMSLX8/tegra234-camera-yuv-gmsl2x8-overlay.dts",
+      "path": "source/hardware/nvidia/t23x/nv-public/overlay/SG8A_ORIN_GMSLX8/tegra234-camera-yuv-gmsl2x8-overlay.dts",
+      "bytes": 102108,
+      "sha256": "d73543b923d48718d0d5169240046b47b81fbd2010885a831f8e8911999c7254"
+    },
+    {
+      "source": "source/kernel/kernel-jammy-src/Makefile",
+      "path": "source/kernel/kernel-jammy-src/Makefile",
+      "bytes": 67308,
+      "sha256": "7fe2ca6857f84b85881fd70eb437633ca7d10c1043897f3cb19dcf8b00b6b4e2"
+    },
+    {
+      "source": "source/nvidia-oot/drivers/media/i2c/Makefile",
+      "path": "source/nvidia-oot/drivers/media/i2c/Makefile",
+      "bytes": 868,
+      "sha256": "63e852f955572d0f946b1d6ebee12145ae171c83083e826b44ceea41574f0125"
+    },
+    {
+      "source": "source/nvidia-oot/drivers/media/platform/tegra/camera/sensor_common.c",
+      "path": "source/nvidia-oot/drivers/media/platform/tegra/camera/sensor_common.c",
+      "bytes": 22055,
+      "sha256": "19b659abaeff1e982ef40c8b215d87c87964f488d61d24dbb7d20b885829c1ff"
+    },
+    {
+      "source": "source/nvidia-oot/drivers/media/platform/tegra/camera/tegracam_ctrls.c",
+      "path": "source/nvidia-oot/drivers/media/platform/tegra/camera/tegracam_ctrls.c",
+      "bytes": 31940,
+      "sha256": "b2cf75fc77d95d6fc20269b15f184de82e42a8ecef7616f759ae9d1ec75f1524"
+    },
+    {
+      "source": "source/nvidia-oot/drivers/media/platform/tegra/cdi/cam_cdi_tsc.c",
+      "path": "source/nvidia-oot/drivers/media/platform/tegra/cdi/cam_cdi_tsc.c",
+      "bytes": 19184,
+      "sha256": "da3ed7bea12d5188d00326ef7079bab724f13a5b7f39794eae98144ab19bbdb5"
+    },
+    {
+      "source": "source/nvidia-oot/include/media/camera_common.h",
+      "path": "source/nvidia-oot/include/media/camera_common.h",
+      "bytes": 12657,
+      "sha256": "2f1928782f1e34bc3bd9d554d5a2e70d4b549b0897d6a438b0f1df73ca5cc2e8"
+    },
+    {
+      "source": "source/nvidia-oot/include/media/gmsl-link.h",
+      "path": "source/nvidia-oot/include/media/gmsl-link.h",
+      "bytes": 2789,
+      "sha256": "30fc5baec8d759b9960cd854c96e8a477cd9bcc5e9818ddc0cbb2f88f5cf08b8"
+    },
+    {
+      "source": "source/nvidia-oot/include/media/tegra-v4l2-camera.h",
+      "path": "source/nvidia-oot/include/media/tegra-v4l2-camera.h",
+      "bytes": 7102,
+      "sha256": "4c024d7341183fb72be9a0e4b51e8a115b9e5f57d50d670deed18096a7d7f4a0"
+    },
+    {
+      "source": "Readme.md",
+      "path": "input_md/Readme.md",
+      "bytes": 8218,
+      "sha256": "20310a2eb5d684bd10d886f2db2de9eb79b098e595be41a0e69824a0370229d0"
+    },
+    {
+      "source": "Version.md",
+      "path": "input_md/Version.md",
+      "bytes": 57,
+      "sha256": "e3cd8b21f2738fae57562b6248392bb1f94e98f35f07ab21558037a945f035f3"
+    }
+  ],
+  "adapted_scripts": [
+    {
+      "source": "install.sh",
+      "source_sha256": "e75a090e669bf554ec8918d0b6870f622890e936818fe04d15fc70a04f37c94b",
+      "path": "scripts/install.sh",
+      "sha256": "392e212a81d62fdd41a20a11e0fc3aa8969b683644a77c5e9b81593339e7cb5a"
+    },
+    {
+      "source": "quick_bring_up_auto.sh",
+      "source_sha256": "51ba824f9e1580a506fa73d712090cb8adb8f3e415011add49967df9113c18df",
+      "path": "scripts/quick_bring_up_auto.sh",
+      "sha256": "fe7a44c5cc2c84d1988b305f05a9edbdf543fc8a9e673b5e04be1b8e661c5f8e"
+    }
+  ],
+  "notes": [
+    "Payload files and vendor source fragments are copied byte-for-byte.",
+    "Scripts use repository-relative payload paths; startup contains no password.",
+    "Supplied source fragments are not a complete matching kernel/driver source tree.",
+    "No local boot configuration, backups, captured images or videos are included."
+  ]
+}

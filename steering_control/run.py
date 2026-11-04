@@ -14,7 +14,7 @@ import threading
 import time
 from uuid import uuid4
 
-from .paths import DATA, setting
+from .paths import DATA, ROOT, setting
 from . import confirmation, model as model_module
 from .asr import runtime as speech_run
 from .chat import deployment
@@ -27,7 +27,9 @@ def build_parser():
     inputs.add_argument("--stream", "--droidcam", help="DroidCam HTTP 视频流地址")
     parser.add_argument("--auto-camera", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--model", type=Path, default=model_module.DEFAULT_MANIFEST, help="手势数值模型清单 JSON")
-    parser.add_argument("--camera-init-script", type=Path, default=setting("camera_init_script"), help="可选的相机厂商初始化脚本，需支持 --check --no-preview")
+    parser.add_argument("--camera-init-script", type=Path,
+                        default=setting("camera_init_script", ROOT / "camera_support/sensing_sg8a/scripts/quick_bring_up_auto.sh"),
+                        help="默认使用仓库内森云 CAM4 初始化脚本；自定义脚本需支持 --check --no-preview")
     parser.add_argument("--window-size", default="1600x900")
     parser.add_argument("--max-width", type=int, default=640)
     parser.add_argument("--draw-landmarks", action=argparse.BooleanOptionalAction, default=True)
@@ -191,6 +193,10 @@ def main(argv=None, *, dispatch=None, arm_state_provider=None):
                               "actions": {label: vars(action) for label, action in confirmation.ACTIONS.items()},
                               "note": "仅数值模型、文件和依赖检查；不代表手机或实物动作已验收"}, ensure_ascii=False, indent=2))
             return 0 if ready else 2
+        from .gesture.camera_startup import prepare_camera
+        prepare_camera(args)
+        if args.camera_init_error:
+            raise RuntimeError(args.camera_init_error)
         recognizer = speech_run.create_recognizer(speech_run.DEFAULT_MODEL, args.asr_threads)
         speech = voice.SpeechService(voice_dir, num_threads=args.tts_threads)
         from .prompts import PromptCache
@@ -231,10 +237,6 @@ def main(argv=None, *, dispatch=None, arm_state_provider=None):
         cache.start()
         print(f"已载入：{model.name}\n事件记录：{directory / 'events.jsonl'}", file=sys.stderr, flush=True)
         print("手机点一次开始，可自然语音下令、持续聊天，或用 OK＋工作手势确认；指令 stdout 为 1/2/3。", file=sys.stderr, flush=True)
-        from .gesture.camera_startup import prepare_camera
-        prepare_camera(args)
-        if args.camera_init_error:
-            raise RuntimeError(args.camera_init_error)
         live_loop(args, model, controller, chat_provider=router.snapshot, arm_state_provider=arm_state_provider,
                   on_pause=router.stop_reply)
         return 0

@@ -19,6 +19,8 @@
 
 验证平台：Jetson AGX Orin、JetPack 6.2 / Ubuntu 22.04、Python 3.10。默认读取 CAM4。其他 Linux 相机可通过 `--camera` 指定；其他平台未做硬件验证。
 
+使用森云 SG8A / ISX031 摄像头的新机器，还需先按 `camera_support/sensing_sg8a/README.md` 安装配套驱动并启用设备树。本仓库已包含当前平台的内核、五个驱动模块、设备树及初始化脚本；支持 L4T R36.4.3 / 内核 5.15.148-tegra。应用只做日常初始化，不自动安装内核或修改启动配置。已有正常出图环境不必重装。
+
 Python 依赖：
 
 ```bash
@@ -88,9 +90,16 @@ python run.py --chat-api http://127.0.0.1:8080/v1 --chat-model local-voice-chat
 python run.py --help
 ```
 
-默认窗口 1600×900，绘制关键点，推理帧最大宽度 640。自动相机初始化默认开启；只有配置了厂商初始化脚本且使用 CAM4 时才调用。脚本需支持 `--check --no-preview` 和 `--no-preview`，程序通过 Bash 调用，不保存密码。未配置则直接打开摄像头。
+默认窗口 1600×900，绘制关键点，推理帧最大宽度 640。自动相机初始化默认开启，使用 CAM4 时默认调用仓库内森云脚本。脚本先只检查环境，再加载驱动和设置参数，不打开预览、不保存密码。首次需要权限时，先在终端完成初始化：
 
-可将 `config.example.json` 复制为 `config.local.json`，填写 `camera_init_script` 或已下载的模型路径。相对路径以仓库根目录为准，空值使用默认值。也可设置对应环境变量，例如 `STEERING_ASR_MODEL`、`STEERING_TTS_MODEL`、`STEERING_LLAMA_SERVER`、`STEERING_CHAT_MODEL`。`chat_model` 配置指 GGUF 路径，CLI `--chat-model` 指 API 模型名。
+```bash
+bash camera_support/sensing_sg8a/scripts/quick_bring_up_auto.sh --no-preview
+python run.py
+```
+
+驱动已加载后，程序可直接初始化相机参数。其他摄像头使用 `--camera 编号 --no-auto-camera`；DroidCam 自动跳过森云脚本。初始化失败会输出原因，并在启动语音、聊天服务前停止；运行中采集失败会退出，目前不自动重连。
+
+可将 `config.example.json` 复制为 `config.local.json`，填写 `camera_init_script` 或已下载的模型路径。相对路径以仓库根目录为准，空值使用默认值；`camera_init_script: null` 现在使用仓库内脚本。已有本机脚本配置继续优先使用，也可通过 `--camera-init-script` 显式覆盖。自定义脚本需支持 `--check --no-preview` 和 `--no-preview`。也可设置对应环境变量，例如 `STEERING_ASR_MODEL`、`STEERING_TTS_MODEL`、`STEERING_LLAMA_SERVER`、`STEERING_CHAT_MODEL`。`chat_model` 配置指 GGUF 路径，CLI `--chat-model` 指 API 模型名。
 
 ## 现场图片与视频学习
 
@@ -152,6 +161,7 @@ steering_control/
   phone.py / web/            手机网页及 HTTP 接口
   preview.py / presentation.py 电脑画面与对话记录
 assets/output_json/          清理来源路径后的数值模型
+camera_support/sensing_sg8a/ 森云驱动、设备树、安装与启动说明
 tests/                       状态机、网页、接口与数值回归
 data/                        本机下载、构建、证书和日志（忽略上传）
 ```
