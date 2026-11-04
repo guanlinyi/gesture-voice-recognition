@@ -33,3 +33,7 @@ __pycache__/
 *.png
 *.jpg
 *.jpeg
+
+# README illustrations generated from SVG; no captured media
+!/docs/interface/output_png/
+!/docs/interface/output_png/*.png

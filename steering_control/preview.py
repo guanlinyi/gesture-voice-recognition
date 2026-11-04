@@ -36,18 +36,18 @@ def draw_inference_overlay(image, lines, font, *, notice=None, notice_font=None,
         if part:
             wrapped.append((part, row_font, color))
     panel_width = min(image.width - 16, int(max(draw.textlength(text, font=row_font)
-                                              for text, row_font, _ in wrapped)) + 28)
-    panel_height = min(image.height - 16, sum(row_font.size + 10 for _, row_font, _ in wrapped) + 20)
+                                              for text, row_font, _ in wrapped)) + 24)
+    panel_height = min(image.height - 16, sum(row_font.size + 6 for _, row_font, _ in wrapped) + 16)
     panel = Image.new("RGBA", (panel_width, panel_height), (12, 22, 32, 215))
     image.paste(panel, (8, 8), panel)
     draw = ImageDraw.Draw(image)
-    y = 16
+    y = 14
     for text, row_font, color in wrapped:
         if y + row_font.size > panel_height + 8:
             break
-        draw.text((20, y), text, font=row_font, fill=color, stroke_width=1 if color == (255, 235, 0) else 0,
+        draw.text((18, y), text, font=row_font, fill=color, stroke_width=1 if color == (255, 235, 0) else 0,
                   stroke_fill=(0, 0, 0))
-        y += row_font.size + 10
+        y += row_font.size + 6
     return image
 
 class Preview:
@@ -89,26 +89,37 @@ class Preview:
         panes = ttk.Panedwindow(recognition, orient="horizontal")
         panes.pack(fill="both", expand=True)
         sidebar = ttk.Frame(panes, width=340)
-        sidebar.pack_propagate(False)
+        sidebar.grid_propagate(False)
         right = ttk.Frame(panes)
         panes.add(sidebar, weight=0)
         panes.add(right, weight=1)
-        ttk.Label(sidebar, text="问答记录", font=(family, 15, "bold")).pack(anchor="w", padx=12, pady=(12, 4))
+        for column in (sidebar, right):
+            column.columnconfigure(0, weight=1)
+            column.rowconfigure(1, weight=1)
+        self.sidebar, self.video_column = sidebar, right
+        self.chat_header = ttk.Frame(sidebar)
+        self.chat_header.grid(row=0, column=0, sticky="new")
+        self.video_header = ttk.Frame(right)
+        self.video_header.grid(row=0, column=0, sticky="new")
+        self.header_height = 0
+        ttk.Label(self.chat_header, text="问答记录", font=(family, 15, "bold")).pack(anchor="w", padx=12, pady=(12, 4))
         self.conversation_state = tk.StringVar(value="等待连接")
-        ttk.Label(sidebar, textvariable=self.conversation_state, wraplength=310, justify="left").pack(fill="x", padx=12, pady=(0, 8))
+        ttk.Label(self.chat_header, textvariable=self.conversation_state, wraplength=310, justify="left").pack(fill="x", padx=12, pady=(0, 8))
         self.messages = ScrolledText(sidebar, width=27, wrap="word", state="disabled", font=(family, 13),
                                      background="#152131", foreground="#e8f0fa", relief="flat", padx=12, pady=12)
-        self.messages.pack(fill="both", expand=True, padx=(8, 0), pady=(0, 8))
+        self.messages.grid(row=1, column=0, sticky="nsew", padx=(8, 0), pady=(0, 8))
         self.messages.tag_configure("user", foreground="#8fe0cb")
         self.messages.tag_configure("system", foreground="#dce7fa")
         self.messages.tag_configure("partial", foreground="#a9bacb")
         self.messages.tag_configure("sent", foreground="#ffeb00", font=(family, 14, "bold"))
         self.messages.tag_configure("error", foreground="#ffaaa5")
         self.record_signature = None
-        self.video = ttk.Label(right, anchor="center")
-        self.video.pack(fill="both", expand=True)
+        ttk.Label(self.video_header, text="实时视频", font=(family, 15, "bold")).pack(anchor="w", padx=12, pady=(12, 4))
         self.info = tk.StringVar()
-        ttk.Label(right, textvariable=self.info, wraplength=1100, justify="left").pack(fill="x", padx=18, pady=12)
+        self.video_info = ttk.Label(self.video_header, textvariable=self.info, wraplength=1100, justify="left")
+        self.video_info.pack(fill="x", padx=12, pady=(0, 8))
+        self.video = ttk.Label(right, anchor="n")
+        self.video.grid(row=1, column=0, sticky="nsew", padx=8, pady=(0, 8))
         self.image = None
         self.overlay_fonts = {}
         self.notice_fonts = {}
@@ -262,17 +273,30 @@ class Preview:
     def update(self, frame, prediction, workflow, snapshot):
         self.learning_panel.refresh()
         self.update_conversation(snapshot)
+        voice = snapshot["voice"]
+        voice_text = "提示音已就绪" if voice["ready"] else "正在准备提示音"
+        if voice["error"]:
+            voice_text = "提示音失败：" + voice["error"]
+        self.info.set(f"{voice_text} · Q / Esc 退出")
+        self.video_info.configure(wraplength=max(180, self.video_column.winfo_width() - 24))
         self.root.update_idletasks()
+        # Reserve the same header height even when conversation status wraps.
+        header_height = max(self.chat_header.winfo_reqheight(), self.video_header.winfo_reqheight())
+        if header_height != self.header_height:
+            self.header_height = header_height
+            self.sidebar.rowconfigure(0, minsize=header_height)
+            self.video_column.rowconfigure(0, minsize=header_height)
+            self.root.update_idletasks()
         video = self.learning_panel.video if self.is_learning else self.video
         width = max(1, video.winfo_width())
         height = max(1, video.winfo_height())
         ratio = min(width / frame.shape[1], height / frame.shape[0])
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         image = Image.fromarray(image).resize((max(1, int(frame.shape[1] * ratio)), max(1, int(frame.shape[0] * ratio))))
-        size = max(16, min(26, image.width // 45))
+        size = max(14, min(22, image.width // 52))
         if size not in self.overlay_fonts:
             self.overlay_fonts[size] = ImageFont.truetype(str(FONT_DIRECTORY / "NotoSansCJKsc-Regular.otf"), size)
-            self.notice_fonts[size] = ImageFont.truetype(str(FONT_DIRECTORY / "NotoSansCJKsc-Bold.otf"), size + 10)
+            self.notice_fonts[size] = ImageFont.truetype(str(FONT_DIRECTORY / "NotoSansCJKsc-Bold.otf"), size + 8)
         notice = self.sent_notice.update(snapshot["last_action"], snapshot.get("last_rejection"))
         if self.is_learning:
             notice = None
@@ -282,14 +306,6 @@ class Preview:
                                        notice=notice, notice_font=self.notice_fonts[size], notice_color=self.sent_notice.color)
         self.image = ImageTk.PhotoImage(image)
         video.configure(image=self.image)
-        voice = snapshot["voice"]
-        voice_text = "提示音已就绪" if voice["ready"] else "正在准备提示音"
-        if voice["error"]:
-            voice_text = "提示音失败：" + voice["error"]
-        label = "食指竖起" if prediction.label == "摆1字" else prediction.label or "未知"
-        last = snapshot["last_action"]
-        self.info.set(f"模型：{snapshot['model']} · {voice_text}\n当前识别：{label} · {workflow}\n"
-                      f"{snapshot['message']}\n最近提交：{last['action'] + '（数字 ' + str(last['id']) + '）' if last else '无'}。关闭窗口或 Q / Esc 退出。")
         self.root.update()
         return self.running
 

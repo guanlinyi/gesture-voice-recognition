@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">第二页｜现场学习</title>
+<desc id="desc">按当前程序布局绘制的界面示意，非运行截图。对话、模型名和素材列表均为示例，未使用采集图片或视频。</desc>
+<g font-family="Noto Sans CJK SC, Microsoft YaHei, PingFang SC, sans-serif">
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#eef1f4" stroke="none"/>
+<rect x="0" y="0" width="1600" height="60" rx="0" fill="#152131" stroke="none"/>
+<text x="24" y="39" font-size="25" fill="#ffffff" font-weight="bold">第二页｜现场学习</text>
+<text x="940" y="38" font-size="20" fill="#bdccda" font-weight="normal">界面示意 · 非运行截图 · 摄像头画面留空</text>
+<rect x="12" y="74" width="1576" height="830" rx="6" fill="#efefef" stroke="#aeb8c3"/>
+<text x="30" y="112" font-size="20" fill="#263445" font-weight="normal">选择模型</text>
+<rect x="128" y="82" width="290" height="42" rx="3" fill="#ffffff" stroke="#b9c2cc"/>
+<text x="140" y="110" font-size="19" fill="#263445" font-weight="normal">精简学习模型  ▾</text>
+<rect x="432" y="82" width="106" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="444" y="110" font-size="19" fill="#263445" font-weight="normal">删除模型</text>
+<rect x="550" y="82" width="145" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="562" y="110" font-size="19" fill="#263445" font-weight="normal">验证所选模型</text>
+<rect x="707" y="82" width="145" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="719" y="110" font-size="19" fill="#263445" font-weight="normal">启用所选模型</text>
+<rect x="864" y="82" width="202" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="876" y="110" font-size="19" fill="#263445" font-weight="normal">打开模型学习图片</text>
+<text x="1086" y="110" font-size="19" fill="#263445" font-weight="normal">当前使用：精简学习模型</text>
+<rect x="24" y="140" width="186" height="46" rx="4" fill="#e1e5e9" stroke="#b9c2cc"/>
+<text x="48" y="171" font-size="22" fill="#263445" font-weight="normal">识别与交互</text>
+<rect x="214" y="140" width="160" height="46" rx="4" fill="#ffffff" stroke="#b9c2cc"/>
+<text x="244" y="171" font-size="22" fill="#263445" font-weight="bold">现场学习</text>
+<rect x="28" y="202" width="904" height="550" rx="3" fill="#26323c" stroke="none"/>
+<rect x="40" y="214" width="420" height="85" rx="5" fill="#111e2c" stroke="none"/>
+<text x="56" y="248" font-size="21" fill="#91eac9" font-weight="normal">现场学习 · 控制命令已暂停</text>
+<text x="56" y="281" font-size="20" fill="#eef4fb" font-weight="normal">识别：握拳</text>
+<text x="254" y="505" font-size="27" fill="#a0b0bd" font-weight="normal">实时摄像头画面（此处留空）</text>
+<text x="40" y="797" font-size="21" fill="#263445" font-weight="normal">采集标签</text>
+<rect x="142" y="769" width="180" height="42" rx="3" fill="#ffffff" stroke="#b9c2cc"/>
+<text x="156" y="797" font-size="20" fill="#263445" font-weight="normal">握拳  ▾</text>
+<rect x="336" y="769" width="134" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="348" y="797" font-size="19" fill="#263445" font-weight="normal">拍照 S</text>
+<rect x="482" y="769" width="176" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="494" y="797" font-size="19" fill="#263445" font-weight="normal">参考录像 V</text>
+<rect x="670" y="769" width="176" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="682" y="797" font-size="19" fill="#263445" font-weight="normal">验证录像 T</text>
+<text x="40" y="851" font-size="20" fill="#263445" font-weight="normal">一段录像保持同一标签，可改变朝向与远近。</text>
+<text x="40" y="882" font-size="20" fill="#263445" font-weight="normal">验证录像只用于评估，不参与学习。</text>
+<text x="956" y="225" font-size="21" fill="#263445" font-weight="normal">学习基础模型：精简学习模型</text>
+<rect x="948" y="246" width="106" height="40" rx="3" fill="#e1e5e9" stroke="#b9c2cc"/>
+<text x="975" y="273" font-size="20" fill="#263445" font-weight="normal">图片</text>
+<rect x="1058" y="246" width="106" height="40" rx="3" fill="#ffffff" stroke="#b9c2cc"/>
+<text x="1085" y="273" font-size="20" fill="#263445" font-weight="bold">视频</text>
+<rect x="948" y="288" width="620" height="202" rx="0" fill="#ffffff" stroke="#b9c2cc"/>
+<rect x="948" y="288" width="620" height="40" rx="0" fill="#e2e7ed" stroke="none"/>
+<text x="964" y="316" font-size="20" fill="#263445" font-weight="normal">标签</text>
+<text x="1208" y="316" font-size="20" fill="#263445" font-weight="normal">用途</text>
+<text x="1433" y="316" font-size="20" fill="#263445" font-weight="normal">帧数</text>
+<rect x="950" y="330" width="616" height="43" rx="0" fill="#d5e9fc" stroke="none"/>
+<text x="964" y="360" font-size="20" fill="#263445" font-weight="normal">握拳</text>
+<text x="1208" y="360" font-size="20" fill="#263445" font-weight="normal">参考</text>
+<text x="1433" y="360" font-size="20" fill="#263445" font-weight="normal">180</text>
+<text x="964" y="405" font-size="20" fill="#263445" font-weight="normal">握拳</text>
+<text x="1208" y="405" font-size="20" fill="#263445" font-weight="normal">验证</text>
+<text x="1433" y="405" font-size="20" fill="#263445" font-weight="normal">90</text>
+<rect x="948" y="505" width="120" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="960" y="533" font-size="19" fill="#263445" font-weight="normal">删除所选</text>
+<rect x="1080" y="505" width="194" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="1092" y="533" font-size="19" fill="#263445" font-weight="normal">打开所选文件</text>
+<rect x="1286" y="505" width="258" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="1298" y="533" font-size="19" fill="#263445" font-weight="normal">打开本批文件夹</text>
+<rect x="948" y="559" width="238" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="960" y="587" font-size="19" fill="#263445" font-weight="normal">评估本批验证录像</text>
+<rect x="948" y="613" width="620" height="150" rx="0" fill="#000000" stroke="none"/>
+<text x="968" y="649" font-size="20" fill="#ffffff" font-weight="normal">视频已保存；点击“打开所选文件”播放。</text>
+<text x="968" y="686" font-size="18" fill="#b7c2ce" font-weight="normal">（列表及帧数为示例，不对应实际素材）</text>
+<rect x="948" y="781" width="300" height="42" rx="3" fill="#ffffff" stroke="#b9c2cc"/>
+<text x="962" y="809" font-size="20" fill="#7a8591" font-weight="normal">输入新模型名称</text>
+<rect x="1262" y="781" width="140" height="42" rx="4" fill="#fafbfc" stroke="#b9c2cc"/><text x="1274" y="809" font-size="19" fill="#263445" font-weight="normal">保存模型</text>
+<text x="1426" y="809" font-size="21" fill="#263445" font-weight="normal">未学习</text>
+<text x="956" y="857" font-size="20" fill="#263445" font-weight="normal">采集素材后填写模型名称并保存；</text>
+<text x="956" y="885" font-size="20" fill="#263445" font-weight="normal">保存不会自动启用。</text>
+<text x="30" y="944" font-size="23" fill="#263445" font-weight="normal">S 保存图片，V 录制学习视频，T 录制独立验证视频；右侧可切换图片／视频列表。</text>
+<text x="30" y="980" font-size="20" fill="#526376" font-weight="normal">保存 → 选择新模型 → 验证 → 启用。进入本页会暂停控制命令发送。</text>
+</g></svg>
