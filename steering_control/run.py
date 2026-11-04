@@ -82,7 +82,7 @@ class Output:
             self.file.close()
 
 
-def live_loop(args, model, controller, *, chat_provider=None, arm_state_provider=None):
+def live_loop(args, model, controller, *, chat_provider=None, arm_state_provider=None, on_pause=None):
     import cv2
     from steering_control.hardware.capture import open_source
     from steering_control.hardware.gestures.classifier import GestureClassifier
@@ -96,13 +96,15 @@ def live_loop(args, model, controller, *, chat_provider=None, arm_state_provider
         source = open_source(stream=args.stream, camera=args.camera)
         if not args.no_show:
             from .preview import Preview
-            window = Preview(args.window_size)
+            window = Preview(args.window_size, model=model, control=controller, on_pause=on_pause)
         with GestureClassifier(model.model_path, **model.classifier_options) as recognizer:
             while args.max_frames is None or frames < args.max_frames:
                 ok, frame = source.read()
                 if not ok:
                     raise RuntimeError("摄像头未收到图像，实验停止，未确认操作已取消")
                 controller.camera_alive()
+                if window:
+                    model = window.active_model
                 if arm_state_provider:
                     feedback = arm_state_provider()
                     if feedback is not None and feedback != last_feedback:
@@ -114,12 +116,20 @@ def live_loop(args, model, controller, *, chat_provider=None, arm_state_provider
                 reading, points = recognizer.read(frame, int(now * 1000), now)
                 descriptor = describe(points, reading.world_landmarks, frame.shape[1], frame.shape[0])
                 prediction = model.predict(descriptor, reading)
+                if window and window.is_learning:
+                    window.learning.on_frame(frame, descriptor, reading, frames / max(.1, now) if frames else 15)
+                    candidate = window.learning.validation_model
+                    if candidate:
+                        prediction = candidate.predict(descriptor, reading)
                 pending = controller.snapshot()["pending"]
                 if pending and pending["id"] != last_request:
                     # A fast direct-voice submission also consumes any previous OK permission.
                     model.policy.gate.cancel()
                     last_request = pending["id"]
-                if controller.awaiting:
+                if controller.learning:
+                    model.policy.gate.cancel()
+                    permitted, status = None, "现场学习中，控制命令已暂停"
+                elif controller.awaiting:
                     model.policy.gate.cancel()
                     permitted, status = None, "语音确认中，暂停新手势触发"
                 else:
@@ -225,7 +235,8 @@ def main(argv=None, *, dispatch=None, arm_state_provider=None):
         prepare_camera(args)
         if args.camera_init_error:
             raise RuntimeError(args.camera_init_error)
-        live_loop(args, model, controller, chat_provider=router.snapshot, arm_state_provider=arm_state_provider)
+        live_loop(args, model, controller, chat_provider=router.snapshot, arm_state_provider=arm_state_provider,
+                  on_pause=router.stop_reply)
         return 0
     except KeyboardInterrupt:
         return 130

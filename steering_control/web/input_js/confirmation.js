@@ -53,6 +53,10 @@
       (inference && inference.prepared ? "已进入手势准备状态，也可直接语音下令" : "手势未进入准备状态，可直接语音下令");
     // Finished requests remain in history, but must not look like a current question.
     byId("question").textContent = awaiting ? (pending.prompt || "正在发送语音指令") : "等待手势或直接语音指令";
+    if (snapshot.work_mode === "learning") {
+      byId("question").textContent = "电脑处于现场学习页面";
+      byId("live-state").textContent = "控制命令已暂停；返回识别页面后恢复";
+    }
     const names = {"摆1字": "食指竖起", "手掌展开": "手掌张开"};
     const states = {confirmed: "已提交", rejected: "已拒绝", rejected_state: "当前状态不允许，未发送", cancelled: "已取消", expired: "已超时", dispatch_failed: "提交失败"};
     byId("request-label").textContent = pending ?

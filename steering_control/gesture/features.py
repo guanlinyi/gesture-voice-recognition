@@ -32,7 +32,10 @@ def describe(landmarks, world_landmarks=None, width=640, height=480):
     if scale <= 1e-8:
         return None
     distances = np.linalg.norm(points[:, None] - points[None, :], axis=2)[PAIRS] / scale
-    return Descriptor(space, distances)
+    from ..learning.sampling import palm_rotation
+    image = np.array([(p.x * width, p.y * height) for p in landmarks], dtype=float)
+    image_scale = float(np.mean(np.linalg.norm(image[[5, 9, 13, 17]] - image[0], axis=1)) / math.hypot(width, height))
+    return Descriptor(space, distances, palm_rotation(points), image_scale)
 
 
 @dataclass

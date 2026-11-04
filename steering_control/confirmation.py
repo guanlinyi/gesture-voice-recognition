@@ -68,6 +68,8 @@ class Confirmation:
         self.answer_timeout, self.prompt_timeout = answer_timeout, prompt_timeout
         self.connection_timeout, self.camera_timeout = connection_timeout, camera_timeout
         self.lock = threading.RLock()
+        self.dispatch_lock = threading.RLock()
+        self.learning = False
         self.session = None
         self.audio_at = self.camera_at = None
         self.enabled = False
@@ -147,6 +149,17 @@ class Confirmation:
         with self.lock:
             self.camera_at = self.clock()
 
+    def set_learning(self, active):
+        """Serialize page transitions with the final hardware dispatch."""
+        with self.dispatch_lock, self.lock:
+            self.learning = bool(active)
+            self._cancel("现场学习中，控制命令已暂停" if active else "已回到识别页面，请重新做 OK 或语音下令")
+            if self.pending and self.pending["state"] == "dispatching":
+                self.pending.update(state="cancelled", reason="工作模式已切换")
+            self.command_token = secrets.token_urlsafe(18)
+            self.last_label = None
+            self._event("work_mode", mode="learning" if active else "recognition")
+
     def update_arm_state(self, state, *, moving=False):
         """Mechanical-arm feedback: moving=False explicitly acknowledges completion."""
         state = {"半展开": "半折叠", "FOLD": "折叠", "HALF": "半折叠", "UNFOLD": "展开"}.get(state, state)
@@ -225,6 +238,7 @@ class Confirmation:
                 self._session(session)
             self._expire()
             return {"revision": self.revision, "answer_timeout": self.answer_timeout,
+                    "work_mode": "learning" if self.learning else "recognition",
                     "model": self.model_name, "message": self.message, "pending": deepcopy(self.pending),
                     "last_action": deepcopy(self.last_action), "voice": self.prompts.status(),
                     "inference": deepcopy(self.inference), "input": self._audio_input(),
@@ -232,7 +246,7 @@ class Confirmation:
                     "arm_state": deepcopy(self.arm_state), "last_rejection": deepcopy(self.last_rejection)}
 
     def _audio_input(self):
-        if self.closed or not self.session or not self.enabled:
+        if self.learning or self.closed or not self.session or not self.enabled:
             return {"mode": "muted", "token": None}
         if self.pending and self.pending["state"] in ("prompting", "listening", "dispatching"):
             return {"mode": "confirmation", "token": self.pending["id"]} if self.pending["state"] == "listening" else {"mode": "muted", "token": None}
@@ -250,7 +264,7 @@ class Confirmation:
             self._expire()
             label = ALIASES.get(label, label)
             old, self.last_label = self.last_label, label
-            if self.closed or label not in ACTIONS or label == old or self.awaiting:
+            if self.learning or self.closed or label not in ACTIONS or label == old or self.awaiting:
                 return False
             now = self.clock()
             if (not self.enabled or self.audio_at is None or now - self.audio_at >= self.connection_timeout
@@ -378,6 +392,13 @@ class Confirmation:
         self._dispatch(pending, action)
 
     def _dispatch(self, pending, action):
+        with self.dispatch_lock:
+            with self.lock:
+                if self.learning or self.closed or pending is not self.pending or pending["state"] != "dispatching":
+                    return False
+            return self._dispatch_active(pending, action)
+
+    def _dispatch_active(self, pending, action):
         request_id = pending["id"]
         with self.lock:
             definition = next(item for item in ACTIONS.values() if item.command == action["command"])
