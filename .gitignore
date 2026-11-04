@@ -1,0 +1,35 @@
+# Machine-specific configuration and environment
+config.local.json
+.env
+.env.*
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+.idea/
+.vscode/
+
+# Downloaded models, engine builds, logs, certificates and generated data
+/data/
+/dist/
+*.gguf
+*.onnx
+*.task
+*.tar.bz2
+*.pem
+*.key
+*.crt
+*.csr
+*.jsonl
+*.log
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wav
+*.mp3
+*.png
+*.jpg
+*.jpeg

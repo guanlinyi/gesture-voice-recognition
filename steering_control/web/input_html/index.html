@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>手势与语音二次确认</title>
+<style>
+body{font:18px/1.65 system-ui,sans-serif;background:#10151e;color:#eef4fb;max-width:800px;margin:auto;padding:22px}button{font:inherit;padding:12px 20px;margin:8px 8px 8px 0;border:0;border-radius:10px;background:#8ad8c0}button:disabled{opacity:.45}section,details{padding:18px;margin-top:16px;background:#1c2533;border-radius:12px}small,p{color:#bfccdd}#question{font-size:25px;color:#9ae4cd}#status,#result{white-space:pre-wrap}meter{width:100%}a{color:#9ae4cd}
+</style>
+<h1>手势、语音控制与实时聊天</h1>
+<p>点一次开始后持续交流。可以自然地说方向盘指令，也可以直接聊天；手势方式仍为 OK → 工作手势 → 语音询问 → 回答“是的”。</p>
+<small id="model">默认模型：OK + 三手势（精简参考）</small>
+<div><button id="start">开始手势语音确认</button><button id="stop" disabled>结束收音</button></div>
+<p id="status" role="status">未连接</p>
+<p id="arm-state" role="status">当前状态：未知</p>
+<p id="arm-rejection" style="color:#ffaaa5"></p>
+<small>麦克风音量</small><meter id="level" min="0" max="1" value="0"></meter>
+<section><small>实时推理</small><div id="live-inference">未进入准备状态</div><small id="live-state">可直接语音下令；手势方式先做 OK</small></section>
+<section><div id="question">等待手势</div><small id="request-label">尚无待确认操作</small><p id="phase" role="status">先开始，再做手势</p><button id="cancel" disabled>取消本次操作</button><small id="time-hint">播报结束后有 8 秒回答。否定、超时或没有明确确认均不执行；下一次重新做 OK。</small></section>
+<section><small>正在识别的语音</small><div id="partial"></div><small>已识别的完整语句</small><div id="final" style="white-space:pre-wrap"></div></section>
+<section><small>最近一次发送的指令</small><div id="result">尚无指令</div></section>
+<section><h2 style="font-size:22px">实时聊天</h2><p id="chat-status" role="status">开始后可以直接说话</p><div id="chat-turns" style="white-space:pre-wrap;overflow-wrap:anywhere" aria-live="polite"></div><button id="chat-stop">停止聊天回答</button><button id="chat-voice">开启聊天朗读</button><label><input type="checkbox" id="chat-interrupt"> 允许语音打断（建议戴耳机）</label><p id="chat-voice-status">声音跟随手机系统输出。默认朗读结束后继续听。</p></section>
+<p>折叠 → 数字 1；半折叠／半展开 → 同一个中间状态，数字 2；展开 → 数字 3。折叠执行中拒绝展开，展开执行中拒绝折叠。未识别为明确指令时会聊天或澄清，不发送数字。“是的”只用于确认已触发的手势。询问播报期间暂停识别。</p>
+<details id="setup"><summary>首次连接 / 排查</summary><p>手机和 Orin 在同一 Wi-Fi。安卓 Chrome 使用终端打印的 HTTPS 地址，首次连接请从下方下载本程序生成的 CA 证书。</p><a href="/phone-ca.crt" download="orin-phone-ca.crt">下载本机 CA 证书</a><p>安卓设置 → 安全 → 安装证书 → CA 证书，装好后重新打开页面并允许麦克风。保持页面在前台，不要锁屏。结束收音、网络断开或摄像头中断时取消尚未确认的操作。</p></details>
+<script src="/phone.js"></script><script src="/reply.js"></script><script src="/chat.js"></script><script src="/confirmation.js"></script>
+</html>

@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "kind": "ok",
+  "workflow": {
+    "kind": "ok",
+    "timing": {
+      "ready_hold": 0.15,
+      "select_hold": 0.2,
+      "idle_timeout": 3.0,
+      "ready_release": 0.15,
+      "lost_hold": 0.15,
+      "max_gap": 0.35,
+      "min_score": 0.7,
+      "min_margin": 0.15
+    },
+    "reference_ready_priority": true
+  },
+  "name": "OK + 三手势（精简参考）",
+  "network": {
+    "sha256": "97952348cf6a6a4915c2ea1496b4b37ebabc50cbbf80571435643c455f2b0482"
+  },
+  "work_config": {
+    "classifier": {
+      "ok_geometry": false
+    },
+    "gate": {
+      "min_score": 0.7,
+      "min_margin": 0.15,
+      "dwell_s": 0.8,
+      "release_s": 0.35,
+      "grace_s": 0.15,
+      "max_rate_s": 1.5,
+      "require_release": true,
+      "start_armed": false,
+      "neutral_gestures": [
+        "none"
+      ]
+    }
+  },
+  "library": "reference_library.json"
+}

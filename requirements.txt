@@ -1,0 +1,6 @@
+# Validated application versions: Python 3.10, Linux aarch64 / Jetson Orin.
+numpy==1.26.4
+mediapipe==0.10.18
+opencv-contrib-python==4.11.0.86
+Pillow==12.3.0
+sherpa-onnx==2.0.1

@@ -1,0 +1,10 @@
+{
+  "data_dir": "data",
+  "camera_init_script": null,
+  "gesture_model": null,
+  "asr_model": null,
+  "tts_model": null,
+  "llama_server": null,
+  "chat_model": null,
+  "chat_mode": "cuda-sm87"
+}
